@@ -41,8 +41,25 @@ After all prerequisite and you should see a sample page setup on your app "Expo 
 The architecture of files and directories are as follows:
 
 * assets
+* Amplify
 * src/ 
-    * 'to be added'
+    * components/
+		* CustomButton/
+			* CustomButton.js
+			* index.js
+		* CustomButton/
+		 	* CustomInput.js
+			* index.js
+	* navigation/
+		* index.js
+	* screen/
+		* HomeScreen/
+			* Homescreen.js
+			* index.js
+		* SignInScreen/
+			* SigninScreen.js
+			* index.js
+	aws-exports.js
 * .gitignore
 * App.js
 * README.md
@@ -50,5 +67,18 @@ The architecture of files and directories are as follows:
 * babel.config.js
 * package-lock.json
 * package.json
+
+
+
+### Dev Guide:
+
+After cloning the project, run 
+
+`npm install`
+
+to install the required packaged. 
+
+Go to https://docs.amplify.aws to make sure you installed all the prerequisite package for AWS Amplify.
+
 
 
