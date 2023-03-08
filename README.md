@@ -29,10 +29,7 @@ noahzhang
 Set up yourself up with Amplify Studio https://docs.amplify.aws/console/
 
 When asked to enter access key, enter the following credential:
-```console
-Access Key: AKIATXRE5FV4RFI7KT4Q
-Secret Access Key: 9rzDD79mdFukPeJeRaHeKhpfo16wPn8z9JgsgIm/
-```
+
 
 ### Quick Guide on Development Setup
 Run
