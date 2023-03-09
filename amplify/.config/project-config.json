@@ -1,4 +1,7 @@
 {
+  "providers": [
+    "awscloudformation"
+  ],
   "projectName": "OneHabit",
   "version": "3.1",
   "frontend": "javascript",
@@ -6,12 +9,9 @@
     "framework": "react-native",
     "config": {
       "SourceDir": "src",
-      "DistributionDir": "/",
-      "BuildCommand": "npm.cmd run-script build",
-      "StartCommand": "npm.cmd run-script start"
+      "DistributionDir": "build",
+      "BuildCommand": "npm build",
+      "StartCommand": "npm start"
     }
-  },
-  "providers": [
-    "awscloudformation"
-  ]
+  }
 }
