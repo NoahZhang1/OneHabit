@@ -105,13 +105,13 @@ const SigninScreen = () => {
                     onPress={handleSubmit(onSignInPressed)}
                 />
 
-                <CustomButton
+                {/* <CustomButton
                     text="Join as a guest"
                     onPress={onJoinasGuest}
                     bgColor="#e3e3e3"
                     fgColor="#363636"
                     type="TERTIARY"
-                />
+                /> */}
 
 
                 <CustomButton
