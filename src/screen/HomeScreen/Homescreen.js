@@ -1,13 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Auth } from 'aws-amplify';
-import { Scheduler } from "@aldabil/react-scheduler";
 
 const HomeScreen = () => {
 
     return (
+        <Text>a</Text>
         
-        <Scheduler ></Scheduler>
     );
 };
 

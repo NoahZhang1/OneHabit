@@ -63,7 +63,7 @@ const SigninScreen = () => {
 
     const onJoinasGuest = () => {
         // console.warn("Apple");
-        navigation.navigate("HomeScreen")
+        navigation.navigate("LeaderboardScreen")
     };
 
     const onSignUpPress = () => {
