@@ -1,13 +1,22 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import { Auth } from 'aws-amplify';
 
-const HomeScreen = () => {
+// write an empty screen for setting screen and add a button to navigate to it
+const SettingScreen = () => {
+
+
+    const signOut = () => {
+        Auth.signOut();
+    };
 
     return (
+
+
         <View style={{ flex: 1 }}>
             <Text style={{ fontSize: 24, alignSelf: 'center' }}>Home, sweet home</Text>
             <Text
+                onPress={signOut}
                 style={{
                     width: '100%',
                     textAlign: 'center',
@@ -16,10 +25,10 @@ const HomeScreen = () => {
                     marginVertical: 20,
                     fontSize: 20,
                 }}>
-                Sign Out
+                Sign out
             </Text>
         </View>
     );
-};
+}
 
-export default HomeScreen;
+export default SettingScreen;
