@@ -79,5 +79,5 @@ The architecture of files and directories are as follows:
 
 Go to https://docs.amplify.aws to make sure you installed all the prerequisite package for AWS Amplify.
 
-
+Follow https://stackoverflow.com/questions/72755476/invariant-violation-viewproptypes-has-been-removed-from-react-native-migrate-t to get rid of deprecation errors associated with a react native library
 
