@@ -1,9 +1,19 @@
 import React from 'react';
+<<<<<<< HEAD:src/screen/HomeScreen/Homescreen.js
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+=======
+import { View, Text, Button } from 'react-native';
+>>>>>>> b4dc50ebf5b3e6c8880d182e7dcf65945e83d6b6:src/screen/SettingScreen/SettingScreen.js
 import { Auth } from 'aws-amplify';
 import { Calendar, CalendarList, Agenda, calendarTheme, AgendaEntry } from 'react-native-calendars';
 
-const HomeScreen = () => {
+// write an empty screen for setting screen and add a button to navigate to it
+const SettingScreen = () => {
+
+
+    const signOut = () => {
+        Auth.signOut();
+    };
 
 
     // const vacation = { key: 'vacation', color: 'red', selectedDotColor: 'blue' };
@@ -12,6 +22,7 @@ const HomeScreen = () => {
     // const selected_date = '2023-03-08'
     return (
 
+<<<<<<< HEAD:src/screen/HomeScreen/Homescreen.js
         <SafeAreaView style={styles.container}>
             <Agenda
                 selected='2023-03-08'
@@ -34,9 +45,28 @@ const HomeScreen = () => {
                 )}
             />
         </SafeAreaView>
-    );
-};
+=======
 
+        <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 24, alignSelf: 'center' }}>Home, sweet home</Text>
+            <Text
+                onPress={signOut}
+                style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    color: 'red',
+                    marginTop: 'auto',
+                    marginVertical: 20,
+                    fontSize: 20,
+                }}>
+                Sign out
+            </Text>
+        </View>
+>>>>>>> b4dc50ebf5b3e6c8880d182e7dcf65945e83d6b6:src/screen/SettingScreen/SettingScreen.js
+    );
+}
+
+<<<<<<< HEAD:src/screen/HomeScreen/Homescreen.js
 export default HomeScreen;
 
 const styles = StyleSheet.create({
@@ -62,3 +92,6 @@ const styles = StyleSheet.create({
         paddingTop: 30
     }
 });
+=======
+export default SettingScreen;
+>>>>>>> b4dc50ebf5b3e6c8880d182e7dcf65945e83d6b6:src/screen/SettingScreen/SettingScreen.js
