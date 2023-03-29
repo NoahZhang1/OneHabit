@@ -7,6 +7,7 @@ import SignInScreen from '../screen/SignInScreen';
 import Homescreen from '../screen/HomeScreen';
 import LeaderboardScreen from '../screen/LeaderboardScreen';
 import SettingScreen from '../screen/SettingScreen';
+import GoalScreen from '../screen/GoalScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Auth, Hub } from 'aws-amplify';
 
@@ -63,6 +64,7 @@ const Navigation = () => {
                         <Tab.Screen name="Home" component={Homescreen} />
                         <Tab.Screen name="LeaderboardScreen" component={LeaderboardScreen} />
                         <Tab.Screen name="SettingScreen" component={SettingScreen} />
+                        <Tab.Screen name="GoalScreen" component={GoalScreen} />
                     </>
                     // <Stack.Screen name="SignIn" component={SignInScreen} />
                     // <Stack.Screen name="Home" component={Homescreen} />
