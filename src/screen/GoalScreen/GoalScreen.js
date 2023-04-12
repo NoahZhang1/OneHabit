@@ -2,14 +2,13 @@ import React from 'react';
 import {View, StyleSheet, Dimensions} from "react-native";
 import {Title, Text, Button, Chip, Snackbar, Portal} from "react-native-paper";
 import {AnimatedCircularProgress} from "react-native-circular-progress";
-import { useNavigation } from '@react-navigation/native';
 import valuesToPercentage, {today} from "../../utilities";
+import FeedbackScreen from '../FeedbackScreen';
 
 const screenWidth = Dimensions.get("window").width;
 
 function GoalScreen() {
 
-    const navigation = useNavigation();
     const [target, setTarget] = React.useState(2);
     const [targetReach, setTargetReach] = React.useState(false);
     const [hour, setHour] = React.useState(0);
@@ -75,6 +74,14 @@ function GoalScreen() {
                         <Button mode="contained" onPress={() => addHour(0.5)}>
                             + 30 mins
                         </Button>
+
+                        {/* <Button mode="contained" onPress={() => 
+                            navigation.navigate('FeedbackScreen', {
+                                paramKey: parseInt(hour),
+                            })
+                            }>
+                            get feedback
+                        </Button> */}
                     </View>
                 </View>
             </View>

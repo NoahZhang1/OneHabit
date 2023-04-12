@@ -1,15 +1,12 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions} from "react-native";
 import {Title, Text, Button, Chip, Snackbar, Portal, TextInput} from "react-native-paper";
-import {AnimatedCircularProgress} from "react-native-circular-progress";
-import { useNavigation } from '@react-navigation/native';
 import valuesToPercentage, {today} from "../../utilities";
 
 const screenWidth = Dimensions.get("window").width;
 
-function GoalScreen() {
+function GoalScreen({navigation}) {
 
-    const navigation = useNavigation();
     const [target, setTarget] = React.useState(2);
     const [targetReach, setTargetReach] = React.useState(false);
     const [hour, setHour] = React.useState(0);
@@ -18,6 +15,9 @@ function GoalScreen() {
     const onToggleTargetSnackBar = () => setTargetSnackVisible(true);
     const onDismissTargetSnackBar = () => setTargetSnackVisible(false);
     const [classTime, setText] = React.useState(true);
+
+    // Study Goals in hours, set database as well
+    const [inputVal, setInputVal] = React.useState("NaN");
 
     const addHour = (amount) => {
         if (amount) {
@@ -49,12 +49,15 @@ function GoalScreen() {
                     {classTime ? (<View style={styles.addContainer}>
                     <Text style={{fontSize:20, fontWeight:'bold'}}>CS 3510</Text>
                     <TextInput
-                    label="Hours"
-                    value={0}
+                        placeholder='in hours'
+                        onChangeText={text => setInputVal(text)}
                     /><View style={styles.buttons}>
-                        <Button mode="contained" onPress={(classTime) => setText(!classTime)}>
-                            Submit
-                        </Button>
+                        <Button mode="contained"
+                            onPress={() =>
+                                navigation.navigate('GoalScreen', {
+                                    paramKey: parseInt(inputVal),
+                                })
+                            }>Submit</Button>
                     </View></View>) : <Text style={{fontWeight:'bold'}}>Class Time Submitted!</Text>}
                     
                 

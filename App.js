@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Alert, Button, TextInput, View, StyleSheet, SafeAreaView } from 'react-native';
 import Navigation from './src/navigation';
 import { Amplify } from 'aws-amplify';
-import config from './src/aws-exports';
+import config from './aws-exports';
 
 import { NavigationContainer } from '@react-navigation/native';
 

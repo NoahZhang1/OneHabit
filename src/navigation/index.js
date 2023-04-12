@@ -9,6 +9,7 @@ import LeaderboardScreen from '../screen/LeaderboardScreen';
 import SettingScreen from '../screen/SettingScreen';
 import GoalScreen from '../screen/GoalScreen';
 import ClassSelectScreen from '../screen/ClassSelectScreen';
+import FeedbackScreen from '../screen/FeedbackScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Auth, Hub } from 'aws-amplify';
 
@@ -67,6 +68,7 @@ const Navigation = () => {
                         <Tab.Screen name="SettingScreen" component={SettingScreen} />
                         <Tab.Screen name="GoalScreen" component={GoalScreen} />
                         <Tab.Screen name="ClassSelectScreen" component={ClassSelectScreen} />
+                        <Tab.Screen name="Feedback" component={FeedbackScreen} />
                     </>
                     // <Stack.Screen name="SignIn" component={SignInScreen} />
                     // <Stack.Screen name="Home" component={Homescreen} />
