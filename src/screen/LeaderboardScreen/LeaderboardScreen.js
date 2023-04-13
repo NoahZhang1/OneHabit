@@ -32,6 +32,8 @@ const LeaderboardScreen = () => {
                 }}
                 editable
                 placeholder='Enter Hours'
+                keyboardType='decimal-pad'
+                returnKeyType='done'
                 onChangeText={(text) => handleIncrement(parseInt(text))} />
             <Button
                 title='Submit'

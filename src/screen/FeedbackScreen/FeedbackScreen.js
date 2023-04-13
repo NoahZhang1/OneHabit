@@ -5,7 +5,7 @@ import { Slider } from 'react-native-elements';
 function FeedbackScreen({route}) {
 
     const colors = ['#F5CECE', '#FFE3D5', '#FFF5D1', '#F0FAEA', '#D4E9C6'];
-    const labels = ['studies way to little', 'slightly less', 'about right', 'a little too much', 'way too much'];
+    const labels = ['way too little', 'slightly less', 'about right', 'a little too much', 'way too much'];
     const faces  = [require("./pics/lazy.png"), 
         require("./pics/chilling.png"), 
         require("./pics/happy.png"), 
@@ -28,6 +28,10 @@ function FeedbackScreen({route}) {
                 source={faces[rate]}
             />
 
+            <Text style={{fontSize:16, paddingLeft: 20, paddingRight: 20, paddingBottom: 25}}>
+                How do your study goals compare to where they should be?
+            </Text>
+
             {!!labels[rate] && (
                 <Text style={{fontSize:20}}>
                     {labels[rate]}
@@ -46,8 +50,8 @@ function FeedbackScreen({route}) {
                 maximumTrackTintColor="#666"
             />
 
-            <Text style={{textAlign: 'center', fontSize: 30}}>Study Sugguestions</Text>
-            <Text style={{margin: 5}}>      {suggestions[rate]} </Text>
+            <Text style={{textAlign: 'center', fontSize: 30}}>Study Suggestions</Text>
+            <Text style={{margin: 5, paddingLeft: 15, paddingRight: 15}}>      {suggestions[rate]} </Text>
         </View>
     ]);
 };

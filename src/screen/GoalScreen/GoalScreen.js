@@ -69,7 +69,7 @@ function GoalScreen() {
                     }
                 />
                 <View style={styles.addContainer}>
-                    <Title style={{marginHorizontal: 70}}>+ Add more hours</Title>
+                    {/* <Title style={{marginHorizontal: 70}}>+ Add more hours</Title> */}
                     <View style={styles.buttons}>
                         <Button mode="contained" onPress={() => addHour(0.5)}>
                             + 30 mins
@@ -87,7 +87,7 @@ function GoalScreen() {
             </View>
             <Snackbar
                 visible={targetSnackVisible}
-                duration={2500}
+                duration={4000}
                 onDismiss={onDismissTargetSnackBar}
                 action={{
                     label: 'Yay!',
