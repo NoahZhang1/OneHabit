@@ -3,9 +3,15 @@ import { View, SafeAreaView, ScrollView, Text, TextInput, Button, ActivityIndica
 import { Auth } from 'aws-amplify';
 import { useNavigation } from '@react-navigation/native';
 import Leaderboard from 'react-native-leaderboard';
+import { Logs } from 'expo'
+import { DataStore } from '@aws-amplify/datastore';
+import { ProductivityScore } from './models';
 
+Logs.enableExpoCliLogging()
 
 const LeaderboardScreen = () => {
+    
+    console.log('test')
     const [data, handleState] = useState([
         { userName: 'Joe', score: 52 },
         { userName: 'Jenny', score: 120 },
@@ -32,8 +38,6 @@ const LeaderboardScreen = () => {
                 }}
                 editable
                 placeholder='Enter Hours'
-                keyboardType='decimal-pad'
-                returnKeyType='done'
                 onChangeText={(text) => handleIncrement(parseInt(text))} />
             <Button
                 title='Submit'
