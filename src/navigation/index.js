@@ -63,19 +63,19 @@ const Navigation = () => {
             <Tab.Navigator screenOptions={{ headerShown: false }}>
                 {user ? (
                     <>
-                        <Tab.Screen name="Home" component={Homescreen} />
-                        <Tab.Screen name="LeaderboardScreen" component={LeaderboardScreen} />
-                        <Tab.Screen name="SettingScreen" component={SettingScreen} />
-                        <Tab.Screen name="GoalScreen" component={GoalScreen} />
-                        <Tab.Screen name="ClassSelectScreen" component={ClassSelectScreen} />
+                        <Tab.Screen name="Home" component={Homescreen}/>
+                        <Tab.Screen name="Classes" component={ClassSelectScreen} />
+                        <Tab.Screen name="Goals" component={GoalScreen} />
                         <Tab.Screen name="Feedback" component={FeedbackScreen} />
+                        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
+                        <Tab.Screen name="Settings" component={SettingScreen} />
                     </>
                     // <Stack.Screen name="SignIn" component={SignInScreen} />
                     // <Stack.Screen name="Home" component={Homescreen} />
                     // <Stack.Screen name="LeaderboardScreen" component={LeaderboardScreen} />
                 ) : (
                     <>
-                        <Tab.Screen name="SignIn" component={SignInScreen} />
+                        <Tab.Screen name="Sign In" component={SignInScreen} />
                         {/* <Stack.Screen name="Home" component={Homescreen} /> */}
                         {/* <Stack.Screen name="SignUp" component={SignUpScreen} /> */}
                         {/* <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen} /> */}

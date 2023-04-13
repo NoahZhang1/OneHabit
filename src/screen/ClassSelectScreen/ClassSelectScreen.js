@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet, Dimensions} from "react-native";
 import {Title, Text, Button, Chip, Snackbar, Portal, TextInput} from "react-native-paper";
 import valuesToPercentage, {today} from "../../utilities";
+import Alert from 'react-native';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -41,22 +42,41 @@ function GoalScreen({navigation}) {
         }
     }, [targetReach])
 
+    // const showAlert = () => {
+    //     Alert.alert(
+    //         'Alert Title',
+    //         'My Alert Msg',
+    //         [
+    //             {
+    //                 text: 'Great'
+    //             }
+    //         ]
+    //     );
+    //     alert("alert");
+    // }
+
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <Title style="text-align:left">Add Study Hours</Title>
-                
+                <Title style="text-align:left">Add Study Hours Goal</Title>
+                <Title style={{fontSize:16, textAlign:'center', paddingLeft:20, paddingRight:20}}>How many hours would you like to study for each class this week?</Title>
                     {classTime ? (<View style={styles.addContainer}>
                     <Text style={{fontSize:20, fontWeight:'bold'}}>CS 3510</Text>
                     <TextInput
+                        returnKeyType='done'
+                        keyboardType='decimal-pad'
                         placeholder='in hours'
                         onChangeText={text => setInputVal(text)}
                     /><View style={styles.buttons}>
                         <Button mode="contained"
                             onPress={() =>
-                                navigation.navigate('GoalScreen', {
-                                    paramKey: parseInt(inputVal),
-                                })
+                                [
+                                //     navigation.navigate('Goals', {
+                                //     paramKey: parseInt(inputVal),
+                                // }),
+                                onToggleTargetSnackBar()
+                                // alert("Your study goals have been set!")
+                            ]
                             }>Submit</Button>
                     </View></View>) : <Text style={{fontWeight:'bold'}}>Class Time Submitted!</Text>}
                     
@@ -64,12 +84,19 @@ function GoalScreen({navigation}) {
             </View>
             <Snackbar
                 visible={targetSnackVisible}
-                duration={2500}
+                duration={3500}
                 onDismiss={onDismissTargetSnackBar}
                 action={{
-                    label: 'Yay!',
+                    label: 'OK',
                     onPress: () => onDismissTargetSnackBar()
-                }}>Great job reaching your goal today! 🎉
+                }}>Your study goals have been set!
+                {/* // visible={targetSnackVisible}
+                // duration={2500}
+                // onDismiss={onDismissTargetSnackBar}
+                // action={{
+                //     label: 'Yay!',
+                //     onPress: () => onDismissTargetSnackBar()
+                // }}>Great job reaching your goal today! 🎉 */}
             </Snackbar>
         </View>
     )
