@@ -5,23 +5,51 @@ import { useNavigation } from '@react-navigation/native';
 import Leaderboard from 'react-native-leaderboard';
 import { Logs } from 'expo'
 import { DataStore } from '@aws-amplify/datastore';
-import { ProductivityScore } from './models';
+import { ProductivityScore } from '../../models';
 
 Logs.enableExpoCliLogging()
 
 const LeaderboardScreen = () => {
     
+    let user = null;
+    let currentItem = null;
     console.log('test')
     const [data, handleState] = useState([
-        { userName: 'Joe', score: 52 },
-        { userName: 'Jenny', score: 120 },
-        { userName: 'Alfred', score: 29 },
-        { userName: 'Hannah', score: 0 },
-        { userName: 'Kate', score: 19 },
-        { userName: 'Michael', score: 22 },
+        { userName: 'Loading User...', score: 20 }
     ]
     );
 
+    function pushChange(currentItem, currentScore) {
+        const pushData = async () => {
+            await DataStore.save(ProductivityScore.copyOf(currentItem, item => {
+                userName = user,
+                score = currentScore
+            }));
+        }
+    }
+    function dataStoreToLeaderboard(scoreList) {
+        console.log('test')
+        console.log(scoreList)
+        var resultArray = [];
+        for(let j = 0; j < scoreList.length; j++) {
+            console.log(scoreList[j])
+            resultArray.push({userName: scoreList[j]['userName'], score: scoreList[j]['score']});
+        }
+        return resultArray;
+    }
+
+    useEffect( () => {
+        const pullData = async () => {
+            user = await Auth.currentAuthenticatedUser();  
+            const models = await DataStore.query(ProductivityScore);
+            console.log(models);
+            console.log(dataStoreToLeaderboard(models))
+            handleState(dataStoreToLeaderboard(models))
+            console.log(data)
+        }
+        pullData();
+    }, [])
+    
     const [increment, handleIncrement] = useState(0);
     return (
         <SafeAreaView>
