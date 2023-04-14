@@ -7,6 +7,7 @@ const SettingScreen = () => {
 
 
     const signOut = () => {
+        Amplify.DataStore.clear()
         Auth.signOut();
     };
 

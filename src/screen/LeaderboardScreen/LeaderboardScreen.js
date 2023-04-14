@@ -7,48 +7,83 @@ import { Logs } from 'expo'
 import { DataStore } from '@aws-amplify/datastore';
 import { ProductivityScore } from '../../models';
 
+
 Logs.enableExpoCliLogging()
 
 const LeaderboardScreen = () => {
     
-    let user = null;
-    let currentItem = null;
-    console.log('test')
+    const [user, handleUser] = useState(null);
+    const [index, handleIndex] = useState(-1);
+    const [currentItem, handleCurrentItem] = useState(null);
+    // console.log('test')
     const [data, handleState] = useState([
-        { userName: 'Loading User...', score: 20 }
+        { userName: 'Loading User...', score: 0 }
     ]
     );
 
     function pushChange(currentItem, currentScore) {
+        console.log('push')
         const pushData = async () => {
+            console.log(currentItem)
             await DataStore.save(ProductivityScore.copyOf(currentItem, item => {
-                userName = user,
-                score = currentScore
+                item.id = currentItem.id,
+                item.userName = user,
+                item.score = currentScore
             }));
+            console.log('pushed')
         }
+        pushData()
     }
-    function dataStoreToLeaderboard(scoreList) {
-        console.log('test')
-        console.log(scoreList)
+
+    function dataStoreToLeaderboard(scoreList, user) {
+        // console.log('test')
+        // console.log(scoreList)
+
         var resultArray = [];
+        var returnIndex = -1;
+        var returnCurrentItem = null;
         for(let j = 0; j < scoreList.length; j++) {
-            console.log(scoreList[j])
+            // console.log(scoreList[j])
             resultArray.push({userName: scoreList[j]['userName'], score: scoreList[j]['score']});
+            // console.log(user)
+            if (scoreList[j]['userName'] === user) {
+                //console.log('found user')
+                returnIndex = j;
+                returnCurrentItem = scoreList[j]
+            }
         }
-        return resultArray;
+        // console.log('resultArray')
+        // console.log(resultArray)
+        // console.log(returnIndex)
+        // console.log(returnCurrentItem)
+        return [resultArray, returnIndex, returnCurrentItem];
     }
 
     useEffect( () => {
         const pullData = async () => {
-            user = await Auth.currentAuthenticatedUser();  
+            var temp = await Auth.currentUserInfo();
+            handleUser(temp["username"])
+            //console.log('user updated')
             const models = await DataStore.query(ProductivityScore);
-            console.log(models);
-            console.log(dataStoreToLeaderboard(models))
-            handleState(dataStoreToLeaderboard(models))
-            console.log(data)
+            // console.log('DATA Downloaded')
+            // console.log(models);
+            let [results, returnIndex, returnCurrentItem] = dataStoreToLeaderboard(models, temp["username"])
+            // console.log("leaderboard vars")
+            // console.log([results, returnIndex, returnCurrentItem])
+            handleIndex(returnIndex);
+            handleCurrentItem(returnCurrentItem);
+            handleState(results)
         }
         pullData();
     }, [])
+
+    useEffect( () => {
+        // console.log("updated Values:")
+        // console.log(user);
+        // console.log(index);
+        // console.log(currentItem);
+        // console.log(data);
+    });
     
     const [increment, handleIncrement] = useState(0);
     return (
@@ -74,7 +109,8 @@ const LeaderboardScreen = () => {
                     margin: 10, alignSelf: 'center',
                     color: 'black',
                 }}
-                onPress={() => { var temp = data.slice(); temp[2].score += increment; handleState(temp) }}
+                onPress={() => { var temp = data.slice(); console.log('press'); console.log(temp);console.log(index); temp[index].score += increment; 
+                    handleState(temp); pushChange(currentItem, temp[index].score)}}
             >
 
             </Button>
