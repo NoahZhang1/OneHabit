@@ -1,3 +1,11 @@
+type Classes @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  username: String!
+  className: String!
+  goal: Int!
+  progress: Int
+}
+
 type ProductivityScore @model @auth(rules: [{allow: public}, {allow: private, provider: iam}]) {
   id: ID!
   userName: String
