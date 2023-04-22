@@ -109,11 +109,12 @@ function ClassSelectScreen({ navigation }) {
                                     
                                     
                                 }
-                            }>Submit</Button>
+                            }
+                            >Submit</Button>
                     </View></View>) : <Text style={{ fontWeight: 'bold' }}>Class Time Submitted!</Text>}
 
-                <Title style="text-align:left">Current Classes</Title>
                 <View style={styles.content}>
+                    <Title style="text-align:left">Current Classes</Title>
                     {classes.map(a => {
                         return (
                             <View style={styles.addContainer}>
@@ -160,6 +161,8 @@ const styles = StyleSheet.create({
         alignContent: 'space-between',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
+        padding: 25,
+        paddingBottom: 40,
     },
     buttons: {
         flexDirection: 'row',
@@ -168,6 +171,8 @@ const styles = StyleSheet.create({
         alignContent: 'space-between',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
+        paddingTop: 25,
+
     },
 
 

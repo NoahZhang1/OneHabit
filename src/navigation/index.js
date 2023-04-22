@@ -68,7 +68,7 @@ const Navigation = () => {
                         <Tab.Screen name="Goals" component={GoalScreen} />
                         <Tab.Screen name="Feedback" component={FeedbackScreen} />
                         <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
-                        <Tab.Screen name="Settings" component={SettingScreen} />
+                        <Tab.Screen name="Sign Out" component={SettingScreen} />
                     </>
                     // <Stack.Screen name="SignIn" component={SignInScreen} />
                     // <Stack.Screen name="Home" component={Homescreen} />
