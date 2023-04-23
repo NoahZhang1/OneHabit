@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, ActivityIndicator } from "react-native";
 import { Title, Text, Button, Chip, Snackbar, Portal, TextInput, Divider } from "react-native-paper";
 import { Logs } from 'expo'
 import { DataStore } from '@aws-amplify/datastore';
 import { Classes } from '../../models';
-import { Auth } from 'aws-amplify';
+import { Auth, Hub } from 'aws-amplify';
 
 Logs.enableExpoCliLogging()
 const screenWidth = Dimensions.get("window").width;
@@ -15,7 +15,7 @@ function ClassSelectScreen({ navigation }) {
     const onToggleTargetSnackBar = () => setTargetSnackVisible(true);
     const onDismissTargetSnackBar = () => setTargetSnackVisible(false);
 
-    const [classes, setClasses] = useState([{ className: 'Loading Classes', goal: '0 Hours' }]);
+    const [classes, setClasses] = useState(null);
     const [user, handleUser] = useState('');
     const [newClass, addClass] = useState(null);
     const [newGoal, addGoal] = useState(null);
@@ -36,19 +36,31 @@ function ClassSelectScreen({ navigation }) {
         pushChange()
     }
     useEffect(() => {
-        const getUser = async () => {
-            var temp = await Auth.currentUserInfo();
-            handleUser(temp["username"])
-            console.log(user)
-        }
-
-        getUser();
-    }, []);
+        
+        const removeListener = Hub.listen("datastore", async (capsule) => {
+            const {
+              payload: { event, data },
+            } = capsule;
+       
+            console.log("DataStore event", event, data);
+       
+            if (event === "ready") {
+                var temp = await Auth.currentUserInfo();
+                handleUser(temp["username"])
+                console.log(user)
+            }
+          });
+          return () => {
+            removeListener();
+          };
+        }, []);
     useEffect(() => {
+        console.log('querying class data')
         const pullData = async () => {
             var classData = await DataStore.query(Classes, (c) => c.username.eq(user));
+            classData = await DataStore.query(Classes, (c) => c.username.eq(user));
+            console.log('class data')
             console.log(classData)
-            console.log("CLASS DATA")
             setClasses(classData)
         }
         pullData()
@@ -94,16 +106,12 @@ function ClassSelectScreen({ navigation }) {
                                         if (classes.map(a => {return a['className']}).indexOf(newClass) != -1) {
                                             console.log('duplicate');
                                         } else {
-                                            console.log('test1')
+                                            
                                             let temp = classes.slice()
                                             temp.push({ className: newClass, goal: newGoal })
-                                            console.log(temp)
-                                            console.log(temp)
                                             setClasses(temp)
                                             pushData(newClass, newGoal)
-                                            console.log('test2')
                                             onToggleTargetSnackBar()
-                                            console.log('test3')
                                         }
                                     }
                                     
@@ -111,9 +119,9 @@ function ClassSelectScreen({ navigation }) {
                                 }
                             }>Submit</Button>
                     </View></View>) : <Text style={{ fontWeight: 'bold' }}>Class Time Submitted!</Text>}
-
-                <Title style="text-align:left">Current Classes</Title>
+                {(classes == null || classes.length == 0) ? <ActivityIndicator size="large"/> :
                 <View style={styles.content}>
+                    <Title style="text-align:left">Current Classes</Title>
                     {classes.map(a => {
                         return (
                             <View style={styles.addContainer}>
@@ -123,6 +131,7 @@ function ClassSelectScreen({ navigation }) {
                         );
                     })}
                 </View>
+                }
             </View>
             <Snackbar
                 visible={targetSnackVisible}

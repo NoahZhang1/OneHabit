@@ -17,7 +17,6 @@ const LeaderboardScreen = () => {
     const [currentItem, handleCurrentItem] = useState(null);
     // console.log('test')
     const [data, handleState] = useState([
-        { userName: 'Loading User...', score: 0 }
     ]
     );
 
@@ -77,22 +76,18 @@ const LeaderboardScreen = () => {
         pullData();
     }, [])
 
-    useEffect( () => {
-        // console.log("updated Values:")
-        // console.log(user);
-        // console.log(index);
-        // console.log(currentItem);
-        // console.log(data);
-    });
+    
     
     const [increment, handleIncrement] = useState(0);
     return (
         <SafeAreaView>
             <Text style={{ fontSize: 22, textAlign: 'center' }}>{"\n\nLeaderboard\n\n"}</Text>
+            {(data == null || data.length == 0) ? <ActivityIndicator size="large"/> :
             <Leaderboard
                 data={data}
                 sortBy='score'
                 labelBy='userName' />
+            }
             <TextInput
                 style={{
                     height: 40, width: 100, borderWidth: 1, padding: 5,

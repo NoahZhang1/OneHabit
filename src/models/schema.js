@@ -34,7 +34,7 @@ export const schema = {
                 "progress": {
                     "name": "progress",
                     "isArray": false,
-                    "type": "Int",
+                    "type": "Float",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -160,5 +160,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.6",
-    "version": "b345a2ddde0058aa3457c35aeb6044b7"
+    "version": "bc360ca221cea347987bd93fe551b10c"
 };

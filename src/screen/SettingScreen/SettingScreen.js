@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
 import { Auth } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
 
 // write an empty screen for setting screen and add a button to navigate to it
 const SettingScreen = () => {
 
 
     const signOut = () => {
-        Amplify.DataStore.clear()
+        DataStore.clear()
         Auth.signOut();
     };
 

@@ -13,6 +13,8 @@ import CustomInput from "../../components/CustomInput/CustomInput";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
+import { Hub } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
 // import { useNavigation } from "@react-navigation/native";
 
 import { Auth } from "aws-amplify";
@@ -44,6 +46,13 @@ const SigninScreen = ({ route }) => {
             // console.log(response);
             // Alert.alert('password correct!');
             // navigation.navigate('HomeScreen');
+            let hubSubscription = Hub.listen('datastore', (msg) => { 
+                if (msg.eventName == "ready") { 
+                    console.log('Datastore Ready')
+                } 
+              }); 
+             
+             await DataStore.start();
 
         } catch (e) {
             Alert.alert('Oops', e.message);

@@ -3,7 +3,7 @@ type Classes @model @auth(rules: [{allow: public}]) {
   username: String!
   className: String!
   goal: Int!
-  progress: Int
+  progress: Float
 }
 
 type ProductivityScore @model @auth(rules: [{allow: public}, {allow: private, provider: iam}]) {
