@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, Text, Image} from "react-native";
+import {Button, Chip, Snackbar} from "react-native-paper";
 import { Slider } from 'react-native-elements';
+import { ScreenHeight } from 'react-native-elements/dist/helpers';
 
 function FeedbackScreen({route}) {
 
@@ -17,6 +19,15 @@ function FeedbackScreen({route}) {
         "It looks like you may be overloading on [subject], which can lead to burnout and decreased performance. Try reducing your study time for this subject by 15 minutes each day to help maintain a healthy balance.",
         "You're dedicating a lot of time to [subject], but it may be more effective to alternate your study time between this subject and another. Consider reducing your study time for this subject by 30 minutes each day and using that time to focus on another subject."]
     const [rate, setRate] = React.useState(0);
+    const [targetSnackVisible, setTargetSnackVisible] = React.useState(false);
+    const onToggleTargetSnackBar = () => setTargetSnackVisible(true);
+    const onDismissTargetSnackBar = () => setTargetSnackVisible(false);
+
+    const submitChange = () => {
+        // add database change here: modify the goal hours
+
+        onToggleTargetSnackBar();
+    }
 
     return ([
         <View style={{
@@ -52,6 +63,22 @@ function FeedbackScreen({route}) {
 
             <Text style={{textAlign: 'center', fontSize: 30}}>Study Suggestions</Text>
             <Text style={{margin: 5, paddingLeft: 15, paddingRight: 15}}>      {suggestions[rate]} </Text>
+
+            
+            <View style={styles.buttons}>
+                <Button mode="contained" onPress={() => submitChange()}>
+                   Submit 
+                </Button>
+            </View>
+            <Snackbar
+                visible={targetSnackVisible}
+                duration={4000}
+                onDismiss={onDismissTargetSnackBar}
+                action={{
+                    label: 'Yay!',
+                    onPress: () => onDismissTargetSnackBar()
+                }}>Great job! Your change has been saved. 🎉
+            </Snackbar>
         </View>
     ]);
 };
@@ -82,17 +109,12 @@ const styles = StyleSheet.create({
             borderWidth: 1, 
             borderColor: '#666'
         },
-        buttonContainer:{
-            position: 'absolute',
-             width: '100%', 
-             padding: 15, 
-             bottom: 0, 
-             backgroundColor: 'black', 
-             alignItems: 'center', 
-             justifyContent: 'center'
-        },
-        buttonLabel:{
-            color: 'white', 
-            fontWeight: 'bold'
-        },
+        buttons: {
+            flexDirection: 'column',
+            alignItems: 'center',
+            height: ScreenHeight - 700,
+            alignContent: 'space-between',
+            flexWrap: 'wrap',
+            justifyContent: 'space-evenly',
+        }, 
 });

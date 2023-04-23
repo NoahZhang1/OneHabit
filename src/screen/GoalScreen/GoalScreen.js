@@ -8,6 +8,7 @@ import { Classes } from '../../models';
 import { Auth } from 'aws-amplify';
 import { Logs } from 'expo'
 import { DataStore } from '@aws-amplify/datastore';
+import { ScreenHeight } from 'react-native-elements/dist/helpers';
 
 Logs.enableExpoCliLogging()
 const screenWidth = Dimensions.get("window").width;
@@ -130,18 +131,16 @@ function GoalScreen() {
                     <View style={styles.addContainer}>
                         {/* <Title style={{marginHorizontal: 70}}>+ Add more hours</Title> */}
                         <View style={styles.buttons}>
+                            <Button mode="contained" onPress={() => addHour(0.25)}>
+                                + 15 mins
+                            </Button>
+                            <Button mode="contained" onPress={() => addHour(0.5)}>
+                                + 30 mins
+                            </Button>
                             <Button mode="contained" onPress={() => addHour(1)}>
                                 + 1 hour
                             </Button>
-
-                            {/* <Button mode="contained" onPress={() => 
-                                navigation.navigate('FeedbackScreen', {
-                                    paramKey: parseInt(hour),
-                                })
-                                }>
-                                get feedback
-                            </Button> */}
-                        </View>
+                            </View>
                     </View>
                 </View>
                 <Snackbar
@@ -183,9 +182,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     buttons: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
-        width: screenWidth - 100,
+        height: ScreenHeight - 700,
         alignContent: 'space-between',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
