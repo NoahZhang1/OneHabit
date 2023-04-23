@@ -4,6 +4,7 @@ import {Title, Text, Button, Chip, Snackbar, Portal} from "react-native-paper";
 import {AnimatedCircularProgress} from "react-native-circular-progress";
 import valuesToPercentage, {today} from "../../utilities";
 import FeedbackScreen from '../FeedbackScreen';
+import { ScreenHeight } from 'react-native-elements/dist/helpers';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -41,7 +42,6 @@ function GoalScreen() {
 
     return (
         <View style={styles.container}>
-            <Title>Today</Title>
             <View style={styles.content}>
                 <Title>CS 3510</Title>
                 <AnimatedCircularProgress
@@ -69,19 +69,16 @@ function GoalScreen() {
                     }
                 />
                 <View style={styles.addContainer}>
-                    {/* <Title style={{marginHorizontal: 70}}>+ Add more hours</Title> */}
                     <View style={styles.buttons}>
+                        <Button mode="contained" onPress={() => addHour(0.25)}>
+                            + 15 mins
+                        </Button>
                         <Button mode="contained" onPress={() => addHour(0.5)}>
                             + 30 mins
                         </Button>
-
-                        {/* <Button mode="contained" onPress={() => 
-                            navigation.navigate('FeedbackScreen', {
-                                paramKey: parseInt(hour),
-                            })
-                            }>
-                            get feedback
-                        </Button> */}
+                        <Button mode="contained" onPress={() => addHour(1)}>
+                            + 1 hour
+                        </Button>
                     </View>
                 </View>
             </View>
@@ -123,9 +120,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     buttons: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
-        width: screenWidth-100,
+        height: ScreenHeight - 700,
         alignContent: 'space-between',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
