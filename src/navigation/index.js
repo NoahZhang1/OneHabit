@@ -12,6 +12,7 @@ import ClassSelectScreen from '../screen/ClassSelectScreen';
 import FeedbackScreen from '../screen/FeedbackScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Auth, Hub } from 'aws-amplify';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,12 +64,31 @@ const Navigation = () => {
             <Tab.Navigator screenOptions={{ headerShown: false }}>
                 {user ? (
                     <>
-                        <Tab.Screen name="Home" component={Homescreen}/>
-                        <Tab.Screen name="Classes" component={ClassSelectScreen} />
-                        <Tab.Screen name="Goals" component={GoalScreen} />
-                        <Tab.Screen name="Feedback" component={FeedbackScreen} />
-                        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
-                        <Tab.Screen name="Sign Out" component={SettingScreen} />
+                        <Tab.Screen name="Classes" component={ClassSelectScreen} options={{
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="book-variant" color={color} size={size} />
+                            ),
+                        }} />
+                        <Tab.Screen name="Goals" component={GoalScreen} options={{
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="flag-checkered" color={color} size={size} />
+                            ),
+                        }}/>
+                        <Tab.Screen name="Feedback" component={FeedbackScreen} options={{
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="comment-quote" color={color} size={size} />
+                            ),
+                        }} />
+                        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} options={{
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="medal" color={color} size={size} />
+                            ),
+                        }}/>
+                        <Tab.Screen name="Sign Out" component={SettingScreen} options={{
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="cog" color={color} size={size} />
+                            ),
+                        }}/>
                     </>
                     // <Stack.Screen name="SignIn" component={SignInScreen} />
                     // <Stack.Screen name="Home" component={Homescreen} />

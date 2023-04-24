@@ -2,8 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, useColorScheme } from 'react-native';
 import { Button } from "react-native-paper";
 import { Auth } from 'aws-amplify';
-// import { Amplify } from 'aws-amplify';
-import { DataStore } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
 
 // write an empty screen for setting screen and add a button to navigate to it
 
