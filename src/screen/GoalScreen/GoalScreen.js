@@ -28,16 +28,39 @@ function GoalScreen() {
     const closeMenu = () => setMenuVisible(false);
     const [user, handleUser] = useState('');
     const [classes, setClasses] = useState([]);
-    const [activeClass, setActiveClass] = useState([{ className: 'Loading Classes', goal: '0 Hours' }]);
-    const addHour = (amount) => {
-        if (amount) {
-            //update database
+    const [activeClass, setActiveClass] = useState([]);
+    const [classSelect, setClassSelect] = useState('Select Class');
+    
+    function saveClass () {
+        if (activeClass != null && activeClass.length != 0) {
+            let classesCopy = classes.map((x) => x);
+            for (let i = 0; i < classesCopy.length; i++) {
+                console.log('activeClass')
+                console.log(activeClass)
+                if (classesCopy[i]['className'] === activeClass['className']) {
+                    classesCopy[i] = {...activeClass}
+                }
+            }
+            setClasses(classesCopy)
         }
-        if (valuesToPercentage(target, hour + amount) >= 100) setTargetReach(true);
+    }
+    const addHour = (amount) => {
+        if (activeClass.length == 0 || !amount) {
+            console.log('error out')
+            console.log(activeClass.length)
+            console.log(!amount)
+            return
+        }
 
-        // Move this to useEffect after connect to the database
-        setHour(hour + amount);
-        setPercentage(valuesToPercentage(target, hour + amount));
+        if (valuesToPercentage(target, hour + amount) >= 100) {
+            console.log('percentage reached')
+            console.log(valuesToPercentage(target, hour + amount))
+            setTargetReach(true);
+        } else {
+            console.log('temp error')
+            console.log(activeClass)
+            pushData(activeClass, activeClass['progress'] + amount)
+        }
     }
 
     React.useEffect(() => {
@@ -79,31 +102,65 @@ function GoalScreen() {
     }, [user, classes])
     useEffect(( )=> {
         console.log('activeClass')
-        console.log(activeClass.className)
+        console.log(activeClass)
+        console.log(activeClass['className'])
         setTarget(activeClass['goal'])
         setHour(activeClass['progress']) 
+        setPercentage(valuesToPercentage(target, activeClass['progress']));
     }, [activeClass])
+
+    function pushData(currentClass, updatedProgress) {
+        console.log('push')
+        const push = async () => {
+            console.log(currentClass)
+            console.log(updatedProgress)
+            var newClass = Classes.copyOf(currentClass, item => {
+                item.username = user,
+                item.className = currentClass.className,
+                item.progress = updatedProgress,
+                item.goal = currentClass.goal
+            })
+            console.log(newClass)
+            await DataStore.save(newClass).then(async (post) => { 
+                console.log(post)
+                let pulledClasses = await DataStore.query(Classes, (c) => c.username.eq(user));
+                console.log(pulledClasses)
+                for (let i in pulledClasses) {
+                    if (i['ClassName'] === activeClass['ClassName']) {
+                        console.log('updating active class')
+                        console.log(pulledClasses[i])
+                        setActiveClass(pulledClasses[i]);
+                    } else {
+                        console.log('name not found')
+                        console.log(activeClass)
+                    }
+                }
+                console.log(activeClass)
+                console.log('pushed')
+                })
+            
+        }
+        push()
+    }
     return (
         <Provider>
             <View style={styles.container}>
-                <Title>Today</Title>
                 <View style={styles.content}>
                     {(classes == null || classes.length == 0) ? <ActivityIndicator size="large"/> :
                         <Menu
                             visible={menuVisible}
                             onDismiss={closeMenu}
                             anchor={<View style={styles.buttons}><Button style="text-align:center" mode='elevated'
-                                onPress={openMenu}>Select Class</Button></View>}
+                                onPress={openMenu}>{classSelect}</Button></View>}
                                 anchorPosition='bottom'>
                             {classes.map(i => {
                                 return (
-                                    <Menu.Item onPress={() => {setActiveClass(i)}} title={i.className}/>
+                                    <Menu.Item onPress={() => {setActiveClass(i); closeMenu(); setClassSelect(i.className); saveClass()}} title={i.className}/>
                 
                                 )})}
                             
                         </Menu>
 }
-                    <Title>{activeClass.className}</Title>
                     <AnimatedCircularProgress
                         style={styles.progress}
                         size={245}
@@ -131,10 +188,10 @@ function GoalScreen() {
                     <View style={styles.addContainer}>
                         {/* <Title style={{marginHorizontal: 70}}>+ Add more hours</Title> */}
                         <View style={styles.buttons}>
-                            <Button mode="contained" onPress={() => addHour(0.25)}>
+                            <Button mode="contained" onPress={() =>{ console.log('addButton'); console.log(activeClass); addHour(0.25)}}>
                                 + 15 mins
                             </Button>
-                            <Button mode="contained" onPress={() => addHour(0.5)}>
+                            <Button mode="contained" onPress={() => { console.log('addButton'); console.log(activeClass); addHour(0.5)}}>
                                 + 30 mins
                             </Button>
                             <Button mode="contained" onPress={() => addHour(1)}>
@@ -161,7 +218,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        marginTop: 20,
+        marginTop: 100,
         alignItems: 'center',
     },
     content: {
@@ -182,9 +239,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     buttons: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
-        height: ScreenHeight - 700,
         alignContent: 'space-between',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
@@ -211,6 +267,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 300,
         overflow: 'hidden',
+        marginTop:20
     }
 });
 
