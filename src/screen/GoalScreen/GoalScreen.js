@@ -41,12 +41,17 @@ function GoalScreen() {
         }
 
         if (valuesToPercentage(target, hour + amount) >= 100) {
+            setHour(target)
+            setPercentage(100)
             console.log('percentage reached')
             console.log(valuesToPercentage(target, hour + amount))
             setTargetReach(true);
+            pushData(activeClass, target)
         } else {
+            console.log('push active class')
             console.log(activeClass)
             pushData(activeClass, activeClass['progress'] + amount)
+
         }
     }
 
@@ -61,6 +66,7 @@ function GoalScreen() {
     }, []);
 
     useEffect(() => {
+        console.log('pulling data')
         const pullData = async () => {
             var classData = await DataStore.query(Classes, (c) => c.username.eq(user));
             const subscription = DataStore.observeQuery(Classes, (c) => c.username.eq(user)).subscribe(snapshot => {
@@ -84,7 +90,7 @@ function GoalScreen() {
         console.log(classes)
         for(let i = 0; i < classes.length; i++) {
             console.log(classes[i])
-            if (classes[i].className === activeClass.className) {
+            if (classes[i].className === classSelect) {
                 console.log('new active')
                 console.log(classes[i])
                 setActiveClass(classes[i])
@@ -96,29 +102,37 @@ function GoalScreen() {
         console.log('activeClass')
         console.log(activeClass)
         console.log(activeClass['className'])
+        console.log(activeClass)
         setTarget(activeClass['goal'])
         setHour(activeClass['progress']) 
-        setPercentage(valuesToPercentage(target, activeClass['progress']));
+        setPercentage(valuesToPercentage(activeClass['goal'], activeClass['progress']));
     }, [activeClass])
 
     function pushData(currentClass, updatedProgress) {
         console.log('push')
         const push = async () => {
-            console.log(currentClass)
-            console.log(updatedProgress)
+            // console.log(currentClass)
+            // console.log(updatedProgress)
             var newClass = Classes.copyOf(currentClass, item => {
                 item.username = user,
                 item.className = currentClass.className,
                 item.progress = updatedProgress,
                 item.goal = currentClass.goal
             })
-            console.log(newClass)
+            // console.log(newClass)
             await DataStore.save(newClass)
         }
         push()
-        console.log('pushed')
+        // console.log('pushed')
         setUpdatedPost(updatedPost + 1)
     }
+
+    useEffect(() => {
+        console.log('percentage')
+        console.log(percentage)
+        console.log(target)
+        console.log(hour)
+    }, [target, hour, percentage])
     return (
         <Provider>
             <View style={styles.container}>
@@ -144,7 +158,7 @@ function GoalScreen() {
                         width={32}
                         rotation={0.25}
                         arcSweepAngle={360}
-                        fill={percentage}
+                        fill={50}
                         tintColor="#F7BC00"
                         backgroundColor="#A44B10"
                         onAnimationComplete={() => console.log('onAnimationComplete')}
@@ -153,10 +167,10 @@ function GoalScreen() {
                             () => (
                                 <View style={{ alignItems: 'center', transform: [{ rotate: "-45deg" }], }}>
                                     <Title>
-                                        {hour} hr
+                                        {3} hr
                                     </Title>
                                     <Text>
-                                        / {target}
+                                        / {1}
                                     </Text>
                                 </View>
                             )
@@ -165,10 +179,10 @@ function GoalScreen() {
                     <View style={styles.addContainer}>
                         {/* <Title style={{marginHorizontal: 70}}>+ Add more hours</Title> */}
                         <View style={styles.buttons}>
-                            <Button mode="contained" onPress={() =>{ console.log('addButton'); console.log(activeClass); addHour(0.25)}}>
+                            <Button mode="contained" onPress={() =>{ addHour(0.25)}}>
                                 + 15 mins
                             </Button>
-                            <Button mode="contained" onPress={() => { console.log('addButton'); console.log(activeClass); addHour(0.5)}}>
+                            <Button mode="contained" onPress={() => { addHour(0.5)}}>
                                 + 30 mins
                             </Button>
                             <Button mode="contained" onPress={() => addHour(1)}>
