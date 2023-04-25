@@ -114,9 +114,9 @@ function GoalScreen() {
             setHour(activeClass['progress']) 
             setPercentage(valuesToPercentage(activeClass['goal'], activeClass['progress']));
         } else {
-            setTarget(5)
-            setHour(1)
-            setPercentage(20)
+            setTarget(0)
+            setHour(0)
+            setPercentage(0)
         }
         
     }, [activeClass])

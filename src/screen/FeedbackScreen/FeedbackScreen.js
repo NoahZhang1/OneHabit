@@ -21,7 +21,7 @@ function FeedbackScreen({ route }) {
         "Your study habits are balanced and effective, but there's always room for improvement. Consider setting specific study goals for each subject or trying out new study techniques to help boost your learning.",
         "It looks like you may be overloading on this subject, which can lead to burnout and decreased performance. Try reducing your study time for this subject by 15 minutes each day to help maintain a healthy balance.",
         "You're dedicating a lot of time to this subject, but it may be more effective to alternate your study time between this subject and another. Consider reducing your study time for this subject by 30 minutes each day and using that time to focus on another subject."]
-    const [rate, setRate] = React.useState(0);
+    const [rate, setRate] = React.useState(2);
     const [targetSnackVisible, setTargetSnackVisible] = React.useState(false);
     const onToggleTargetSnackBar = () => setTargetSnackVisible(true);
     const onDismissTargetSnackBar = () => setTargetSnackVisible(false);
