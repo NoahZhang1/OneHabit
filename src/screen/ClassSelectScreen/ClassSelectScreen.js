@@ -121,7 +121,7 @@ function ClassSelectScreen({ navigation }) {
                     <Title style="text-align:left">Current Classes</Title>
                     {classes.map(a => {
                         return (
-                            <View style={styles.addContainer}>
+                            <View style={styles.classContainer}>
                                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{a.className}</Text>
                                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{a.goal}</Text>
                             </View>
@@ -168,6 +168,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         padding: 25,
         paddingBottom: 40,
+    },
+    classContainer: {
+        flex: 1,
+        flexGrow: 0.25,
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: screenWidth,
+        
+        flexWrap: 'wrap',
+        justifyContent: 'space-evenly',
+        padding: 15,
+        paddingBottom: 10,
     },
     buttons: {
         flexDirection: 'row',

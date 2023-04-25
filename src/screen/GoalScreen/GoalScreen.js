@@ -30,7 +30,8 @@ function GoalScreen() {
     const [classes, setClasses] = useState([]);
     const [activeClass, setActiveClass] = useState([]);
     const [classSelect, setClassSelect] = useState('Select Class');
-    
+    const [updatedPost, setUpdatedPost] = useState(0);
+
     const addHour = (amount) => {
         if (activeClass.length == 0 || !amount) {
             console.log('error out')
@@ -44,7 +45,6 @@ function GoalScreen() {
             console.log(valuesToPercentage(target, hour + amount))
             setTargetReach(true);
         } else {
-            console.log('temp error')
             console.log(activeClass)
             pushData(activeClass, activeClass['progress'] + amount)
         }
@@ -59,6 +59,18 @@ function GoalScreen() {
         getUser()
         
     }, []);
+
+    useEffect(() => {
+        const pullData = async () => {
+            var classData = await DataStore.query(Classes, (c) => c.username.eq(user));
+            const subscription = DataStore.observeQuery(Classes, (c) => c.username.eq(user)).subscribe(snapshot => {
+                const { items, isSynced } = snapshot;
+                setClasses(items)
+            })
+            
+        }
+        pullData()
+    }, [user, updatedPost])
 
     // Show the congrat message
     React.useEffect(() => {
@@ -80,26 +92,6 @@ function GoalScreen() {
         }
     }, [classes])
 
-    useEffect(() => {
-        console.log('Goal Screen vars')
-        console.log(user)
-        console.log(classes)
-        const pullData = async () => {
-            var classData = await DataStore.query(Classes, (c) => c.username.eq(user));
-            setClasses(classData)
-        }
-        if (user != null && classes.length == 0) {
-            console.log('user null or class false')
-            console.log(classes)
-            pullData()
-        }
-        if (classes != null && classes.length > 0) {
-            console.log('class null or 0')
-            console.log(classes)
-            console.log(activeClass)
-              
-        }
-    }, [user, classes])
     useEffect(( )=> {
         console.log('activeClass')
         console.log(activeClass)
@@ -121,26 +113,11 @@ function GoalScreen() {
                 item.goal = currentClass.goal
             })
             console.log(newClass)
-            await DataStore.save(newClass).then(async (post) => { 
-                console.log(post)
-                let pulledClasses = await DataStore.query(Classes, (c) => c.username.eq(user));
-                console.log(pulledClasses)
-                for (let i in pulledClasses) {
-                    if (i['ClassName'] === activeClass['ClassName']) {
-                        console.log('updating active class')
-                        console.log(pulledClasses[i])
-                        setActiveClass(pulledClasses[i]);
-                    } else {
-                        console.log('name not found')
-                        console.log(activeClass)
-                    }
-                }
-                console.log(activeClass)
-                console.log('pushed')
-                })
-            
+            await DataStore.save(newClass)
         }
         push()
+        console.log('pushed')
+        setUpdatedPost(updatedPost + 1)
     }
     return (
         <Provider>
