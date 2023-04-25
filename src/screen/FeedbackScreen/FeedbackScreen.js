@@ -16,11 +16,11 @@ function FeedbackScreen({ route }) {
     require("./pics/happy.png"),
     require("./pics/working_hard.png"),
     require("./pics/stressed.png")];
-    const suggestions = ["Based on your feedback, it looks like you could benefit from adding some extra study time for this subject. Consider adding an additional 30 minutes of study time each day for this subject to help improve your understanding and retention.",
-        "You're on the right track with your study habits, but you could benefit from a little extra focus on this subject. Try adding 15 minutes of study time each day for this subject to help improve your performance.",
+    const suggestions = ["Based on your feedback, it looks like you could benefit from adding some extra study time for this subject. Consider adding an additional 1 hour of study time each week for this subject to help improve your understanding and retention.",
+        "You're on the right track with your study habits, but you could benefit from a little extra focus on this subject. Try adding 30 minutes of study time each week for this subject to help improve your performance.",
         "Your study habits are balanced and effective, but there's always room for improvement. Consider setting specific study goals for each subject or trying out new study techniques to help boost your learning.",
-        "It looks like you may be overloading on this subject, which can lead to burnout and decreased performance. Try reducing your study time for this subject by 15 minutes each day to help maintain a healthy balance.",
-        "You're dedicating a lot of time to this subject, but it may be more effective to alternate your study time between this subject and another. Consider reducing your study time for this subject by 30 minutes each day and using that time to focus on another subject."]
+        "It looks like you may be overloading on this subject, which can lead to burnout and decreased performance. Try reducing your study time for this subject by 30 minutes each week to help maintain a healthy balance.",
+        "You're dedicating a lot of time to this subject, but it may be more effective to alternate your study time between this subject and another. Consider reducing your study time for this subject by 1 hour each week and using that time to focus on another subject."]
     const [rate, setRate] = React.useState(2);
     const [targetSnackVisible, setTargetSnackVisible] = React.useState(false);
     const onToggleTargetSnackBar = () => setTargetSnackVisible(true);
@@ -33,7 +33,7 @@ function FeedbackScreen({ route }) {
     const [activeClass, setActiveClass] = useState([]);
     const [classSelect, setClassSelect] = useState('Select Class')
     const [updatedPost, setUpdatedPost] = useState(0);
-    const hourChanges = [2, 1, 0, -1, -2]
+    const hourChanges = [1, 0.5, 0, -0.5, -1]
 
     useEffect(() => {
 
@@ -66,7 +66,7 @@ function FeedbackScreen({ route }) {
                 item.username = user,
                     item.className = currentClass.className,
                     item.progress = currentClass.progress,
-                    item['goal'] = currentClass['goal'] + goalAdjustment
+                    item['goal'] = ((currentClass['goal'] + goalAdjustment >= 0 ? currentClass['goal'] + goalAdjustment: 0))
             })
             console.log(newClass)
             await DataStore.save(newClass)
