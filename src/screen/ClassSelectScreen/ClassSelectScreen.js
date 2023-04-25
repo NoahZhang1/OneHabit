@@ -56,14 +56,10 @@ function ClassSelectScreen({ navigation }) {
         }, []);
     useEffect(() => {
         console.log('querying class data')
-        const pullData = async () => {
-            var classData = await DataStore.query(Classes, (c) => c.username.eq(user));
-            classData = await DataStore.query(Classes, (c) => c.username.eq(user));
-            console.log('class data')
-            console.log(classData)
-            setClasses(classData)
-        }
-        pullData()
+        const subscription = DataStore.observeQuery(Classes, (c) => c.username.eq(user)).subscribe(snapshot => {
+            const { items, isSynced } = snapshot;
+            setClasses(items)
+        })
     }, [user])
 
     //logging

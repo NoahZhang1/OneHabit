@@ -4,14 +4,6 @@ import Navigation from './src/navigation';
 import { Amplify } from 'aws-amplify';
 import config from './src/aws-exports';
 
-import { NavigationContainer } from '@react-navigation/native';
-
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { withAuthenticator } from 'aws-amplify-react-native';
-import SigninScreen from './src/screen/SignInScreen';
-import Homescreen from './src/screen/HomeScreen';
-import SettingScreen from './src/screen/SettingScreen';
-import Leaderboard from 'react-native-leaderboard';
 
 Amplify.configure(config);
 // export default class App extends Component {

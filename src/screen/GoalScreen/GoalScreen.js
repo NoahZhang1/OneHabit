@@ -31,19 +31,6 @@ function GoalScreen() {
     const [activeClass, setActiveClass] = useState([]);
     const [classSelect, setClassSelect] = useState('Select Class');
     
-    function saveClass () {
-        if (activeClass != null && activeClass.length != 0) {
-            let classesCopy = classes.map((x) => x);
-            for (let i = 0; i < classesCopy.length; i++) {
-                console.log('activeClass')
-                console.log(activeClass)
-                if (classesCopy[i]['className'] === activeClass['className']) {
-                    classesCopy[i] = {...activeClass}
-                }
-            }
-            setClasses(classesCopy)
-        }
-    }
     const addHour = (amount) => {
         if (activeClass.length == 0 || !amount) {
             console.log('error out')
@@ -79,6 +66,19 @@ function GoalScreen() {
             onToggleTargetSnackBar();
         }
     }, [targetReach])
+
+    React.useEffect(() => {
+        console.log('setting active class')
+        console.log(classes)
+        for(let i = 0; i < classes.length; i++) {
+            console.log(classes[i])
+            if (classes[i].className === activeClass.className) {
+                console.log('new active')
+                console.log(classes[i])
+                setActiveClass(classes[i])
+            }
+        }
+    }, [classes])
 
     useEffect(() => {
         console.log('Goal Screen vars')
@@ -155,7 +155,7 @@ function GoalScreen() {
                                 anchorPosition='bottom'>
                             {classes.map(i => {
                                 return (
-                                    <Menu.Item onPress={() => {setActiveClass(i); closeMenu(); setClassSelect(i.className); saveClass()}} title={i.className}/>
+                                    <Menu.Item onPress={() => {setActiveClass(i); closeMenu(); setClassSelect(i.className)}} title={i.className}/>
                 
                                 )})}
                             

@@ -52,9 +52,7 @@ function FeedbackScreen({ route }) {
                 const { items, isSynced } = snapshot;
                 setClasses(items)
             })
-            // console.log('pulling class data')
-            // console.log(classData)
-            // setClasses(classData)
+            
         }
         pullData()
     }, [user, updatedPost])
