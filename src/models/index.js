@@ -4,9 +4,10 @@ import { schema } from './schema';
 
 
 
-const { Classes, ProductivityScore } = initSchema(schema);
+const { Usernames, Classes, ProductivityScore } = initSchema(schema);
 
 export {
+  Usernames,
   Classes,
   ProductivityScore
 };

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Leaderboard from 'react-native-leaderboard';
 import { Logs } from 'expo'
 import { DataStore } from '@aws-amplify/datastore';
-import { ProductivityScore } from '../../models';
+import { Classes, Usernames } from '../../models';
 
 
 Logs.enableExpoCliLogging()
@@ -16,23 +16,8 @@ const LeaderboardScreen = () => {
     const [index, handleIndex] = useState(-1);
     const [currentItem, handleCurrentItem] = useState(null);
     // console.log('test')
-    const [data, handleState] = useState([
-    ]
-    );
-
-    function pushChange(currentItem, currentScore) {
-        console.log('push')
-        const pushData = async () => {
-            console.log(currentItem)
-            await DataStore.save(ProductivityScore.copyOf(currentItem, item => {
-                item.id = currentItem.id,
-                item.userName = user,
-                item.score = currentScore
-            }));
-            console.log('pushed')
-        }
-        pushData()
-    }
+    const [data, handleState] = useState([]);
+    const [dataChanged, handleDataChanged] = useState(0);
 
     function dataStoreToLeaderboard(scoreList, user) {
         // console.log('test')
@@ -62,23 +47,78 @@ const LeaderboardScreen = () => {
         const pullData = async () => {
             var temp = await Auth.currentUserInfo();
             handleUser(temp["username"])
-            //console.log('user updated')
-            const models = await DataStore.query(ProductivityScore);
-            // console.log('DATA Downloaded')
-            // console.log(models);
-            let [results, returnIndex, returnCurrentItem] = dataStoreToLeaderboard(models, temp["username"])
-            // console.log("leaderboard vars")
-            // console.log([results, returnIndex, returnCurrentItem])
-            handleIndex(returnIndex);
-            handleCurrentItem(returnCurrentItem);
-            handleState(results)
         }
         pullData();
     }, [])
 
+    useEffect(() => {
+        const subscription = DataStore.observeQuery(Classes).subscribe(snapshot => {
+            const { items, isSynced } = snapshot;
+            console.log('items')
+            console.log(items)
+            let userInList = false;
+            let scores = {};
+            let scoreList = []
+            for (let i = 0; i < items.length; i ++) {
+                console.log(items[i])
+                if (items[i].username === user) {
+                    userInList = true;
+                }
+                if (scores.hasOwnProperty(items[i].username)) {
+                    scores[items[i].username]['score'] += items[i]['progress'] 
+                } else {
+                    scores[items[i].username] = {userName: items[i].username, score: items[i].progress}
+                }
+            }
+            console.log('scores')
+            console.log(scores)
+            for (let i in scores) {
+                scoreList.push(scores[i])
+            }
+            let [results, returnIndex, returnCurrentItem] = dataStoreToLeaderboard(scoreList, user)
+
+            if (userInList == false) {
+                console.log('user saved')
+                console.log(user)
+                const push = async () => {
+                    await DataStore.save(new Usernames({
+                        "username": user,
+                    }))
+                }
+                push()
+            }
+
+            handleIndex(returnIndex);
+            handleCurrentItem(returnCurrentItem);
+            handleState(results)
+            handleDataChanged(dataChanged + 1)
+        })
+    }, [user])
+    useEffect( () => {
+        const subscription = DataStore.observeQuery(Usernames).subscribe(snapshot => {
+            const { items, isSynced } = snapshot;
+            newData = data.slice()
+            for (let i = 0; i < items.length; i++) {
+                let found = false
+                for (let j = 0; j < data.length; j++) {
+                    if (data[j]['userName'] === items[i]['username']) {
+                        found = true;
+                        break
+                    }
+                }
+                if (found == false) {
+                    newData.push({userName: items[i]['username'], score: 0})
+                }
+            }
+            handleState(newData)
+        })
+    }, [dataChanged])
+    useEffect( () => {
+        console.log('user and classes')
+        console.log(user)
+        console.log(data)
+    }, [user, data])
     
-    
-    const [increment, handleIncrement] = useState(0);
     return (
         <SafeAreaView>
             <Text style={{ fontSize: 22, textAlign: 'center' }}>{"\n\nLeaderboard\n\n"}</Text>
@@ -88,30 +128,6 @@ const LeaderboardScreen = () => {
                 sortBy='score'
                 labelBy='userName' />
             }
-            <TextInput
-                style={{
-                    height: 40, width: 100, borderWidth: 1, padding: 5,
-                    margin: 10, alignSelf: 'center',
-                    color: 'black', placeholderTextColor: 'black'
-                }}
-                editable
-                returnKeyType='done'
-                keyboardType='decimal-pad'
-                placeholder='Enter Hours'
-                onChangeText={(text) => handleIncrement(parseInt(text))} />
-            <Button
-                title='Submit'
-                style={{
-                    height: 40, width: 300, borderWidth: 1, padding: 5,
-                    margin: 10, alignSelf: 'center',
-                    color: 'black',
-                }}
-                onPress={() => { var temp = data.slice(); console.log('press'); console.log(temp);console.log(index); temp[index].score += increment; 
-                    handleState(temp); pushChange(currentItem, temp[index].score)}}
-            >
-
-            </Button>
-
         </SafeAreaView>
     );
 };

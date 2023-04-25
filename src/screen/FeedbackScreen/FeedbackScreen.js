@@ -56,6 +56,7 @@ function FeedbackScreen({ route }) {
         }
         pullData()
     }, [user, updatedPost])
+
     function push(currentClass, goalAdjustment) {
         console.log('push')
         console.log(goalAdjustment)
@@ -89,18 +90,6 @@ function FeedbackScreen({ route }) {
         
     }, [classes]);
 
-    useEffect(() => {
-        console.log('getting active class')
-        console.log(activeClass)
-        
-    }, [activeClass]);
-    // //logging
-    // useEffect(() => {
-    //     console.log("Changed Log")
-    //     console.log(user);
-    //     console.log(classes)
-    //     console.log("End Changed Log")
-    // }, [classes, user])
     return ([
         <Provider>
             <View style={{
