@@ -12,7 +12,7 @@ Logs.enableExpoCliLogging()
 
 const LeaderboardScreen = () => {
     
-    const [user, handleUser] = useState(null);
+    const [user, handleUser] = useState("initializing");
     const [index, handleIndex] = useState(-1);
     const [currentItem, handleCurrentItem] = useState(null);
     // console.log('test')
@@ -61,7 +61,7 @@ const LeaderboardScreen = () => {
             let scoreList = []
             for (let i = 0; i < items.length; i ++) {
                 console.log(items[i])
-                if (items[i].username === user) {
+                if (items[i]['username'] === user) {
                     userInList = true;
                 }
                 if (scores.hasOwnProperty(items[i].username)) {
@@ -77,7 +77,7 @@ const LeaderboardScreen = () => {
             }
             let [results, returnIndex, returnCurrentItem] = dataStoreToLeaderboard(scoreList, user)
 
-            if (userInList == false) {
+            if (userInList == false && user != null && user != 'initializing') {
                 console.log('user saved')
                 console.log(user)
                 const push = async () => {
