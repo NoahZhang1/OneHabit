@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Dimensions, ActivityIndicator, Alert } from "react-native";
 import { Title, Text, Button, Chip, Snackbar, Portal, TextInput, Divider } from "react-native-paper";
 import { Logs } from 'expo'
 import { DataStore } from '@aws-amplify/datastore';
@@ -97,7 +97,8 @@ function ClassSelectScreen({ navigation }) {
                                 {
                                     
                                     if (!newClass || !newGoal) {
-                                        console.log('one input not entered')
+                                        console.log('one input not entered');
+                                        Alert.alert("Please enter valid input.");
                                     } else {
                                         if (classes.map(a => {return a['className']}).indexOf(newClass) != -1) {
                                             console.log('duplicate');
