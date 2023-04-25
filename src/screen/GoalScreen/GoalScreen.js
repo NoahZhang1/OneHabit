@@ -18,7 +18,7 @@ function GoalScreen() {
     const [target, setTarget] = React.useState(2);
     const [targetReach, setTargetReach] = React.useState(false);
     const [hour, setHour] = React.useState(0);
-    const [percentage, setPercentage] = React.useState(valuesToPercentage(target, hour));
+    const [percentage, setPercentage] = React.useState(25);
     const [targetSnackVisible, setTargetSnackVisible] = React.useState(false);
     const onToggleTargetSnackBar = () => setTargetSnackVisible(true);
     const onDismissTargetSnackBar = () => setTargetSnackVisible(false);
@@ -61,6 +61,9 @@ function GoalScreen() {
             handleUser(temp["username"])
             
         }
+        console.log(target)
+        console.log(hour)
+        console.log(percentage)
         getUser()
         
     }, []);
@@ -76,6 +79,7 @@ function GoalScreen() {
             
         }
         pullData()
+        
     }, [user, updatedPost])
 
     // Show the congrat message
@@ -103,9 +107,18 @@ function GoalScreen() {
         console.log(activeClass)
         console.log(activeClass['className'])
         console.log(activeClass)
-        setTarget(activeClass['goal'])
-        setHour(activeClass['progress']) 
-        setPercentage(valuesToPercentage(activeClass['goal'], activeClass['progress']));
+        if (typeof activeClass['goal'] !== 'undefined') {
+            console.log('test goal set')
+            console.log(activeClass)
+            setTarget(activeClass['goal'])
+            setHour(activeClass['progress']) 
+            setPercentage(valuesToPercentage(activeClass['goal'], activeClass['progress']));
+        } else {
+            setTarget(5)
+            setHour(1)
+            setPercentage(20)
+        }
+        
     }, [activeClass])
 
     function pushData(currentClass, updatedProgress) {
@@ -132,10 +145,12 @@ function GoalScreen() {
         console.log(percentage)
         console.log(target)
         console.log(hour)
-    }, [target, hour, percentage])
+    }, [target, hour, percentage, classes])
+    // REMOVING VIEW BRINGS BACK PROGRESS?
     return (
         <Provider>
             <View style={styles.container}>
+                
                 <View style={styles.content}>
                     {(classes == null || classes.length == 0) ? <ActivityIndicator size="large"/> :
                         <Menu
@@ -151,14 +166,14 @@ function GoalScreen() {
                                 )})}
                             
                         </Menu>
-}
+                    }
                     <AnimatedCircularProgress
                         style={styles.progress}
                         size={245}
                         width={32}
                         rotation={0.25}
                         arcSweepAngle={360}
-                        fill={50}
+                        fill={percentage}
                         tintColor="#F7BC00"
                         backgroundColor="#A44B10"
                         onAnimationComplete={() => console.log('onAnimationComplete')}
@@ -167,16 +182,16 @@ function GoalScreen() {
                             () => (
                                 <View style={{ alignItems: 'center', transform: [{ rotate: "-45deg" }], }}>
                                     <Title>
-                                        {3} hr
+                                        {hour} hr
                                     </Title>
                                     <Text>
-                                        / {1}
+                                        / {target}
                                     </Text>
                                 </View>
                             )
                         }
                     />
-                    <View style={styles.addContainer}>
+                    
                         {/* <Title style={{marginHorizontal: 70}}>+ Add more hours</Title> */}
                         <View style={styles.buttons}>
                             <Button mode="contained" onPress={() =>{ addHour(0.25)}}>
@@ -188,8 +203,8 @@ function GoalScreen() {
                             <Button mode="contained" onPress={() => addHour(1)}>
                                 + 1 hour
                             </Button>
-                            </View>
-                    </View>
+                        </View>
+                    
                 </View>
                 <Snackbar
                     visible={targetSnackVisible}
