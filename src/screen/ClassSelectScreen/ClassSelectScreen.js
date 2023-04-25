@@ -113,7 +113,8 @@ function ClassSelectScreen({ navigation }) {
                                     
                                     
                                 }
-                            }>Submit</Button>
+                            }
+                            >Submit</Button>
                     </View></View>) : <Text style={{ fontWeight: 'bold' }}>Class Time Submitted!</Text>}
                 {(classes == null || classes.length == 0) ? <ActivityIndicator size="large"/> :
                 <View style={styles.content}>
@@ -165,6 +166,8 @@ const styles = StyleSheet.create({
         alignContent: 'space-between',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
+        padding: 25,
+        paddingBottom: 40,
     },
     buttons: {
         flexDirection: 'row',
@@ -173,6 +176,8 @@ const styles = StyleSheet.create({
         alignContent: 'space-between',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
+        paddingTop: 25,
+
     },
 
 

@@ -64,7 +64,6 @@ const Navigation = () => {
             <Tab.Navigator screenOptions={{ headerShown: false }}>
                 {user ? (
                     <>
-
                         <Tab.Screen name="Classes" component={ClassSelectScreen} options={{
                             tabBarIcon: ({ color, size }) => (
                                 <MaterialCommunityIcons name="book-variant" color={color} size={size} />
@@ -85,7 +84,7 @@ const Navigation = () => {
                                 <MaterialCommunityIcons name="medal" color={color} size={size} />
                             ),
                         }}/>
-                        <Tab.Screen name="Settings" component={SettingScreen} options={{
+                        <Tab.Screen name="Sign Out" component={SettingScreen} options={{
                             tabBarIcon: ({ color, size }) => (
                                 <MaterialCommunityIcons name="cog" color={color} size={size} />
                             ),
