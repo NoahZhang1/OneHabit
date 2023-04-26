@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useInsertionEffect } from 'react';
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, Alert } from "react-native";
 import { Button, Chip, Snackbar, Menu, Provider } from "react-native-paper";
 import { Slider } from 'react-native-elements';
 import { ScreenHeight } from 'react-native-elements/dist/helpers';
@@ -61,19 +61,25 @@ function FeedbackScreen({ route }) {
         console.log('push')
         console.log(goalAdjustment)
         console.log(currentClass)
-        const push = async () => {
-            var newClass = Classes.copyOf(currentClass, item => {
-                item.username = user,
-                    item.className = currentClass.className,
-                    item.progress = currentClass.progress,
-                    item['goal'] = ((currentClass['goal'] + goalAdjustment >= 0 ? currentClass['goal'] + goalAdjustment: 0))
-            })
-            console.log(newClass)
-            await DataStore.save(newClass)
+        console.log(currentClass == [])
+        console.log(currentClass.className)
+        if (currentClass.className !== undefined) {
+            const push = async () => {
+                var newClass = Classes.copyOf(currentClass, item => {
+                    item.username = user,
+                        item.className = currentClass.className,
+                        item.progress = currentClass.progress,
+                        item['goal'] = ((currentClass['goal'] + goalAdjustment >= 0 ? currentClass['goal'] + goalAdjustment: 0))
+                })
+                console.log(newClass)
+                await DataStore.save(newClass)
+            }
+            push()
+            onToggleTargetSnackBar();
+            setUpdatedPost(updatedPost + 1)
+        } else {
+            Alert.alert("Please select a class to adjust your study goal.");
         }
-        push()
-        onToggleTargetSnackBar();
-        setUpdatedPost(updatedPost + 1)
     }
 
     useEffect(() => {
