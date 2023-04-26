@@ -2,10 +2,8 @@ import React, { useState, useEffect, useInsertionEffect } from 'react';
 import { View, StyleSheet, Text, Image, Alert } from "react-native";
 import { Button, Chip, Snackbar, Menu, Provider } from "react-native-paper";
 import { Slider } from 'react-native-elements';
-import { ScreenHeight } from 'react-native-elements/dist/helpers';
 import { Classes } from '../../models';
 import { Auth, Hub } from 'aws-amplify';
-import { Logs } from 'expo'
 import { DataStore } from '@aws-amplify/datastore';
 function FeedbackScreen({ route }) {
 
@@ -36,11 +34,9 @@ function FeedbackScreen({ route }) {
     const hourChanges = [1, 0.5, 0, -0.5, -1]
 
     useEffect(() => {
-
         const getUser = async () => {
             var temp = await Auth.currentUserInfo();
             handleUser(temp["username"])
-            
         }
         getUser()
     }, []);
@@ -52,17 +48,11 @@ function FeedbackScreen({ route }) {
                 const { items, isSynced } = snapshot;
                 setClasses(items)
             })
-            
         }
         pullData()
     }, [user, updatedPost])
 
     function push(currentClass, goalAdjustment) {
-        console.log('push')
-        console.log(goalAdjustment)
-        console.log(currentClass)
-        console.log(currentClass == [])
-        console.log(currentClass.className)
         if (currentClass.className !== undefined) {
             const push = async () => {
                 var newClass = Classes.copyOf(currentClass, item => {
@@ -71,7 +61,6 @@ function FeedbackScreen({ route }) {
                         item.progress = currentClass.progress,
                         item['goal'] = ((currentClass['goal'] + goalAdjustment >= 0 ? currentClass['goal'] + goalAdjustment: 0))
                 })
-                console.log(newClass)
                 await DataStore.save(newClass)
             }
             push()
@@ -83,13 +72,8 @@ function FeedbackScreen({ route }) {
     }
 
     useEffect(() => {
-        console.log('setting active class')
-        console.log(classes)
         for(let i = 0; i < classes.length; i++) {
-            console.log(classes[i])
             if (classes[i].className === activeClass.className) {
-                console.log('new active')
-                console.log(classes[i])
                 setActiveClass(classes[i])
             }
         }

@@ -4,14 +4,11 @@ import { Button } from "react-native-paper";
 import { Auth } from 'aws-amplify';
 import { DataStore } from '@aws-amplify/datastore';
 
-// write an empty screen for setting screen and add a button to navigate to it
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
 const SettingScreen = () => {
-
-
     const signOut = () => {
         DataStore.clear()
         Auth.signOut();
@@ -19,23 +16,12 @@ const SettingScreen = () => {
 
     return (
 
-
-        // <View style={{ flex: 1 }}>
-        //     <Button mode='contained'
-        //         onPress={signOut}
-        //         title='Sign Out'
-        //         style={styles.buttons}>
-        //         Sign out
-        //     </Button>
-        // </View>
-
         <View style={styles.container}>
             <View style={styles.content}>
                 <View style={styles.buttons}>
                     <Button mode='contained'
                         onPress={signOut}
-                        labelStyle={{width: 150, height: 50, fontSize: 30, paddingTop: 20}}
-                        >
+                        labelStyle={{width: 150, height: 50, fontSize: 30, paddingTop: 20}}>
                             Sign Out
                     </Button>   
                 </View>

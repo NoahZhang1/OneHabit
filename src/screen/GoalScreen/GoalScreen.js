@@ -3,12 +3,10 @@ import { View, StyleSheet, Dimensions, ActivityIndicator } from "react-native";
 import { Title, Text, Button, Chip, Snackbar, Portal, Menu, Divider, Provider } from "react-native-paper";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import valuesToPercentage, { today } from "../../utilities";
-import FeedbackScreen from '../FeedbackScreen';
 import { Classes } from '../../models';
 import { Auth } from 'aws-amplify';
 import { Logs } from 'expo'
 import { DataStore } from '@aws-amplify/datastore';
-import { ScreenHeight } from 'react-native-elements/dist/helpers';
 
 Logs.enableExpoCliLogging()
 const screenWidth = Dimensions.get("window").width;
@@ -34,24 +32,16 @@ function GoalScreen() {
 
     const addHour = (amount) => {
         if (activeClass.length == 0 || !amount) {
-            console.log('error out')
-            console.log(activeClass.length)
-            console.log(!amount)
             return
         }
 
         if (valuesToPercentage(target, hour + amount) >= 100) {
             setHour(target)
             setPercentage(100)
-            console.log('percentage reached')
-            console.log(valuesToPercentage(target, hour + amount))
             setTargetReach(true);
             pushData(activeClass, target)
         } else {
-            console.log('push active class')
-            console.log(activeClass)
             pushData(activeClass, activeClass['progress'] + amount)
-
         }
     }
 
@@ -59,30 +49,23 @@ function GoalScreen() {
         const getUser = async () => {
             var temp = await Auth.currentUserInfo();
             handleUser(temp["username"])
-            
         }
-        console.log(target)
-        console.log(hour)
-        console.log(percentage)
         getUser()
-        
+
     }, []);
 
     useEffect(() => {
-        console.log('pulling data')
         const pullData = async () => {
             var classData = await DataStore.query(Classes, (c) => c.username.eq(user));
             const subscription = DataStore.observeQuery(Classes, (c) => c.username.eq(user)).subscribe(snapshot => {
                 const { items, isSynced } = snapshot;
                 setClasses(items)
             })
-            
         }
         pullData()
-        
+
     }, [user, updatedPost])
 
-    // Show the congrat message
     React.useEffect(() => {
         if (targetReach === true) {
             onToggleTargetSnackBar();
@@ -90,81 +73,56 @@ function GoalScreen() {
     }, [targetReach])
 
     React.useEffect(() => {
-        console.log('setting active class')
-        console.log(classes)
-        for(let i = 0; i < classes.length; i++) {
-            console.log(classes[i])
+        for (let i = 0; i < classes.length; i++) {
             if (classes[i].className === classSelect) {
-                console.log('new active')
-                console.log(classes[i])
                 setActiveClass(classes[i])
             }
         }
     }, [classes])
 
-    useEffect(( )=> {
-        console.log('activeClass')
-        console.log(activeClass)
-        console.log(activeClass['className'])
-        console.log(activeClass)
+    useEffect(() => {
         if (typeof activeClass['goal'] !== 'undefined') {
-            console.log('test goal set')
-            console.log(activeClass)
             setTarget(activeClass['goal'])
-            setHour(activeClass['progress']) 
+            setHour(activeClass['progress'])
             setPercentage(valuesToPercentage(activeClass['goal'], activeClass['progress']));
         } else {
             setTarget(0)
             setHour(0)
             setPercentage(0)
         }
-        
     }, [activeClass])
 
     function pushData(currentClass, updatedProgress) {
-        console.log('push')
         const push = async () => {
-            // console.log(currentClass)
-            // console.log(updatedProgress)
             var newClass = Classes.copyOf(currentClass, item => {
                 item.username = user,
-                item.className = currentClass.className,
-                item.progress = updatedProgress,
-                item.goal = currentClass.goal
+                    item.className = currentClass.className,
+                    item.progress = updatedProgress,
+                    item.goal = currentClass.goal
             })
-            // console.log(newClass)
             await DataStore.save(newClass)
         }
         push()
-        // console.log('pushed')
         setUpdatedPost(updatedPost + 1)
     }
 
-    useEffect(() => {
-        console.log('percentage')
-        console.log(percentage)
-        console.log(target)
-        console.log(hour)
-    }, [target, hour, percentage, classes])
-    // REMOVING VIEW BRINGS BACK PROGRESS?
     return (
         <Provider>
             <View style={styles.container}>
-                
                 <View style={styles.content}>
-                    {(classes == null || classes.length == 0) ? <ActivityIndicator size="large"/> :
+                    {(classes == null || classes.length == 0) ? <ActivityIndicator size="large" /> :
                         <Menu
                             visible={menuVisible}
                             onDismiss={closeMenu}
                             anchor={<View style={styles.buttons}><Button style="text-align:center" mode='elevated'
                                 onPress={openMenu}>{classSelect}</Button></View>}
-                                anchorPosition='bottom'>
+                            anchorPosition='bottom'>
                             {classes.map(i => {
                                 return (
-                                    <Menu.Item onPress={() => {setActiveClass(i); closeMenu(); setClassSelect(i.className)}} title={i.className}/>
-                
-                                )})}
-                            
+                                    <Menu.Item onPress={() => { setActiveClass(i); closeMenu(); setClassSelect(i.className) }} title={i.className} />
+
+                                )
+                            })}
                         </Menu>
                     }
                     <AnimatedCircularProgress
@@ -191,20 +149,18 @@ function GoalScreen() {
                             )
                         }
                     />
-                    
-                        {/* <Title style={{marginHorizontal: 70}}>+ Add more hours</Title> */}
-                        <View style={styles.buttons}>
-                            <Button mode="contained" onPress={() =>{ addHour(0.25)}}>
-                                + 15 mins
-                            </Button>
-                            <Button mode="contained" onPress={() => { addHour(0.5)}}>
-                                + 30 mins
-                            </Button>
-                            <Button mode="contained" onPress={() => addHour(1)}>
-                                + 1 hour
-                            </Button>
-                        </View>
-                    
+                    <View style={styles.buttons}>
+                        <Button mode="contained" onPress={() => { addHour(0.25) }}>
+                            + 15 mins
+                        </Button>
+                        <Button mode="contained" onPress={() => { addHour(0.5) }}>
+                            + 30 mins
+                        </Button>
+                        <Button mode="contained" onPress={() => addHour(1)}>
+                            + 1 hour
+                        </Button>
+                    </View>
+
                 </View>
                 <Snackbar
                     visible={targetSnackVisible}
@@ -250,7 +206,7 @@ const styles = StyleSheet.create({
         alignContent: 'space-between',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
-        textAlign:'center'
+        textAlign: 'center'
     },
     circle: {
         width: 181,
@@ -273,7 +229,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 300,
         overflow: 'hidden',
-        marginTop:20
+        marginTop: 20
     }
 });
 

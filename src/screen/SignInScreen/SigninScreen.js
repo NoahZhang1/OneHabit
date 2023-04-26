@@ -12,11 +12,9 @@ import Logo from '../../../assets/Logo.png';
 import CustomInput from "../../components/CustomInput/CustomInput";
 import CustomButton from "../../components/CustomButton/CustomButton";
 import { useNavigation } from '@react-navigation/native';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Hub } from 'aws-amplify';
 import { DataStore } from '@aws-amplify/datastore';
-// import { useNavigation } from "@react-navigation/native";
-
 import { Auth } from "aws-amplify";
 
 
@@ -31,7 +29,6 @@ const SigninScreen = ({ route }) => {
 
     const navigation = useNavigation();
     const { height } = useWindowDimensions();
-    // const navigation = useNavigation();
 
     const onSignInPressed = async data => {
 
@@ -43,9 +40,6 @@ const SigninScreen = ({ route }) => {
         setLoading(true);
         try {
             const response = await Auth.signIn(data.username, data.password);
-            // console.log(response);
-            // Alert.alert('password correct!');
-            // navigation.navigate('HomeScreen');
             let hubSubscription = Hub.listen('datastore', (msg) => { 
                 if (msg.eventName == "ready") { 
                     console.log('Datastore Ready')
@@ -60,23 +54,6 @@ const SigninScreen = ({ route }) => {
         setLoading(false);
     };
 
-    const onForgotPasswordPressed = () => {
-        console.warn("forgot password");
-    };
-
-    const onSignInGoogle = () => {
-        console.warn("google");
-        //123124312
-    };
-
-    const onJoinasGuest = () => {
-        // console.warn("Apple");
-        // navigation.navigate("HomeScreen")
-    };
-
-    const onSignUpPress = () => {
-        console.warn("signup");
-    };
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -111,34 +88,6 @@ const SigninScreen = ({ route }) => {
                 <CustomButton
                     text={loading ? 'Loading...' : 'Sign In'}
                     onPress={handleSubmit(onSignInPressed)}
-                />
-
-                <CustomButton
-                    text="Join as a guest"
-                    onPress={onJoinasGuest}
-                    bgColor="#e3e3e3"
-                    fgColor="#363636"
-                    type="TERTIARY"
-                />
-
-
-                <CustomButton
-                    text="Sign In with Google"
-                    onPress={onSignInGoogle}
-                    bgColor="#FAE9EA"
-                    fgColor="#DD4D44"
-                    type="TERTIARY"
-                />
-
-                <CustomButton
-                    text="Forgot Password?"
-                    onPress={onForgotPasswordPressed} type="TERTIARY"
-                />
-
-                <CustomButton
-                    text="Don't have an account?"
-                    onPress={onSignUpPress}
-                    type="TERTIARY"
                 />
 
             </View>

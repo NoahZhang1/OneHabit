@@ -22,55 +22,38 @@ function ClassSelectScreen({ navigation }) {
 
 
     function pushData(classData, goalData) {
-        console.log('push')
         const pushChange = async () => {
-            console.log(classData)
             await DataStore.save(new Classes({
                 "username": user,
                 "className": classData,
                 "goal": goalData,
                 "progress": 0
             }));
-            console.log('pushed')
         }
         pushChange()
     }
     useEffect(() => {
-        
+
         const removeListener = Hub.listen("datastore", async (capsule) => {
             const {
-              payload: { event, data },
+                payload: { event, data },
             } = capsule;
-       
-            console.log("DataStore event", event, data);
-       
+
             if (event === "ready") {
                 var temp = await Auth.currentUserInfo();
                 handleUser(temp["username"])
-                console.log(user)
             }
-          });
-          return () => {
+        });
+        return () => {
             removeListener();
-          };
-        }, []);
+        };
+    }, []);
     useEffect(() => {
-        console.log('querying class data')
         const subscription = DataStore.observeQuery(Classes, (c) => c.username.eq(user)).subscribe(snapshot => {
             const { items, isSynced } = snapshot;
             setClasses(items)
         })
     }, [user])
-
-    //logging
-    useEffect(() => {
-        console.log("Changed Log")
-        console.log(user);
-        console.log(classes)
-        console.log("End Changed Log")
-    }, [classes, user])
-
-
 
     return (
         <View style={styles.container}>
@@ -90,45 +73,41 @@ function ClassSelectScreen({ navigation }) {
                         placeholder='Goal (hours)'
                         onChangeText={a => addGoal(parseInt(a))}
                     />
-                    
+
                     <View style={styles.buttons}>
                         <Button mode="contained"
-                            onPress={() =>
-                                {
-                                    
-                                    if (!newClass || !newGoal) {
-                                        console.log('one input not entered');
-                                        Alert.alert("Please enter valid input.");
+                            onPress={() => {
+                                if (!newClass || !newGoal) {
+                                    Alert.alert("Please enter valid input.");
+                                } else {
+                                    if (classes.map(a => { return a['className'] }).indexOf(newClass) != -1) {
                                     } else {
-                                        if (classes.map(a => {return a['className']}).indexOf(newClass) != -1) {
-                                            console.log('duplicate');
-                                        } else {
-                                            
-                                            let temp = classes.slice()
-                                            temp.push({ className: newClass, goal: newGoal })
-                                            setClasses(temp)
-                                            pushData(newClass, newGoal)
-                                            onToggleTargetSnackBar()
-                                        }
+
+                                        let temp = classes.slice()
+                                        temp.push({ className: newClass, goal: newGoal })
+                                        setClasses(temp)
+                                        pushData(newClass, newGoal)
+                                        onToggleTargetSnackBar()
                                     }
-                                    
-                                    
                                 }
+
+
                             }
-                            >Submit</Button>
+                            }
+                        >Submit</Button>
                     </View></View>) : <Text style={{ fontWeight: 'bold' }}>Class Time Submitted!</Text>}
-                {(classes == null || classes.length == 0) ? <ActivityIndicator size="large"/> :
-                <View style={styles.content}>
-                    <Title style="text-align:left">Current Classes</Title>
-                    {classes.map(a => {
-                        return (
-                            <View style={styles.classContainer}>
-                                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{a.className}</Text>
-                                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{a.goal}</Text>
-                            </View>
-                        );
-                    })}
-                </View>
+                {(classes == null || classes.length == 0) ? <ActivityIndicator size="large" /> :
+                    <View style={styles.content}>
+                        <Title style="text-align:left">Current Classes</Title>
+                        {classes.map(a => {
+                            return (
+                                <View style={styles.classContainer}>
+                                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{a.className}</Text>
+                                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{a.goal}</Text>
+                                </View>
+                            );
+                        })}
+                    </View>
                 }
             </View>
             <Snackbar
@@ -176,7 +155,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: screenWidth,
-        
+
         flexWrap: 'wrap',
         justifyContent: 'space-evenly',
         padding: 15,
